@@ -264,6 +264,18 @@
   background: #e7e9f4;
 }
 
+.feature-table tbody tr:nth-child(even).row-positive {
+  background: #dff1e4;
+}
+
+.feature-table tbody tr:nth-child(even).row-negative {
+  background: #f8dede;
+}
+
+.feature-table tbody tr:nth-child(even).row-neutral {
+  background: #eaecf6;
+}
+
 .examples-header {
   display: flex;
   flex-direction: column;
