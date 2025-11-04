@@ -299,26 +299,6 @@
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
 }
 
-.example-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 16px;
-  margin-bottom: 12px;
-  color: #2e2e2e;
-}
-
-.example-label {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.example-label.secondary {
-  font-size: 16px;
-  font-weight: 500;
-  color: #5b5b5b;
-}
-
 .example-delta {
   display: flex;
   flex-wrap: wrap;
@@ -327,7 +307,7 @@
   padding: 10px 12px;
   border-radius: 10px;
   font-size: 15px;
-  margin-bottom: 14px;
+  margin-top: 14px;
   background: #f3f5fb;
   color: #2f2f2f;
 }

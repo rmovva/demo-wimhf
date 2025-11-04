@@ -102,23 +102,6 @@ function ExampleCard({ example }) {
 
   return (
     <div className="example-card">
-      <div className="example-meta">
-        <span className="example-label">Chosen response</span>
-        <span className="example-label secondary">Rejected response</span>
-      </div>
-      <div
-        className={clsx(
-          'example-delta',
-          signedZScore > 0 && 'delta-positive',
-          signedZScore < 0 && 'delta-negative',
-          signedZScore === 0 && 'delta-neutral'
-        )}
-      >
-        <span className="delta-value">
-          Feature z-score: {formatSignedValue(signedZScore, 1)}
-        </span>
-        <span className="delta-text">{comparisonText}</span>
-      </div>
       <div className="prompt-box">
         <strong>Prompt</strong>
         <div className="prompt-text">{example.prompt}</div>
@@ -144,6 +127,19 @@ function ExampleCard({ example }) {
           <strong>Rejected response</strong>
           <div className="response-text">{rejectedResponse}</div>
         </div>
+      </div>
+      <div
+        className={clsx(
+          'example-delta',
+          signedZScore > 0 && 'delta-positive',
+          signedZScore < 0 && 'delta-negative',
+          signedZScore === 0 && 'delta-neutral'
+        )}
+      >
+        <span className="delta-value">
+          Feature z-score: {formatSignedValue(signedZScore, 1)}
+        </span>
+        <span className="delta-text">{comparisonText}</span>
       </div>
     </div>
   );
@@ -380,7 +376,7 @@ function App() {
           <div className="examples-header">
             {selectedFeature ? (
               <h2>
-                <em>{selectedFeature.interpretation}</em>
+                Feature {selectedFeature.feature_idx}: {selectedFeature.interpretation}
               </h2>
             ) : (
               <h2>Examples</h2>
