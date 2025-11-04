@@ -258,7 +258,7 @@ function App() {
         </div>
         <div className="header-title">
           <h1>What&apos;s In My Human Feedback?</h1>
-          <h3>Explain human feedback datasets using sparse autoencoder features.</h3>
+          <h3>Explain the encoded preferences in feedback data using interpretable sparse autoencoder features.</h3>
         </div>
         <div className="header-block">
           <strong>Repo:</strong>
