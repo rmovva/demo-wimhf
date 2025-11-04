@@ -383,9 +383,6 @@ function App() {
             )}
             {selectedFeature && (
               <div className="feature-stats">
-                <span className="feature-id">
-                  Feature #{selectedFeature.feature_idx}
-                </span>
                 <span>
                   <strong>{formatSignedPercent(getDeltaWinRate(selectedFeature))}</strong> win rate delta
                 </span>
