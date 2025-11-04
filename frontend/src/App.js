@@ -38,6 +38,7 @@ const SORT_DIRECTIONS = {
 
 const SIGNIFICANCE_DENOMINATOR = 32;
 const SIGNIFICANCE_THRESHOLD = 0.05 / SIGNIFICANCE_DENOMINATOR;
+const EXAMPLE_FIELDS = ['top_5_percent', 'top_2_percent', 'top_examples'];
 
 function isFeatureSignificant(feature) {
   const pValue =
@@ -170,6 +171,19 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
   );
 }
 
+function getFeatureExamples(feature) {
+  if (!feature?.examples) {
+    return [];
+  }
+  for (const field of EXAMPLE_FIELDS) {
+    const list = feature.examples[field];
+    if (Array.isArray(list) && list.length) {
+      return list;
+    }
+  }
+  return [];
+}
+
 function App() {
   const [data, setData] = useState({});
   const [datasets, setDatasets] = useState([]);
@@ -256,10 +270,11 @@ function App() {
   }, [features, selectedFeatureId]);
 
   const sortedExamples = useMemo(() => {
-    if (!selectedFeature?.examples?.top_5_percent) {
+    const exampleList = getFeatureExamples(selectedFeature);
+    if (!exampleList.length) {
       return [];
     }
-    const items = [...selectedFeature.examples.top_5_percent];
+    const items = [...exampleList];
     items.sort((a, b) => {
       const aScore = getExampleSignedZScore(a);
       const bScore = getExampleSignedZScore(b);
