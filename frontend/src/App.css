@@ -347,25 +347,14 @@
   font-size: 16px;
   font-weight: 600;
   color: #1f2937;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-.example-delta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 14px;
-  font-size: 15px;
-  color: #111827;
-}
-
-.delta-value {
-  font-weight: 600;
-}
-
-.delta-text {
+.example-comparison {
   font-size: 14px;
+  color: #111827;
   line-height: 1.5;
+  margin-bottom: 12px;
 }
 
 .response-label {

@@ -132,10 +132,14 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
       </>
     );
   })();
+  const zScoreLabel = formatSignedValue(signedZScore, 1);
 
   return (
     <div className="example-card">
-      <div className="example-number">Example {exampleIndex + 1}</div>
+      <div className="example-number">
+        Example {exampleIndex + 1}: z-score {zScoreLabel}
+      </div>
+      <div className="example-comparison">{comparisonText}</div>
       <div className="prompt-box">
         <strong>Prompt</strong>
         <div className="prompt-text">{example.prompt}</div>
@@ -161,12 +165,6 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
           <strong>Rejected response</strong>
           <div className="response-text">{rejectedResponse}</div>
         </div>
-      </div>
-      <div className="example-delta">
-        <span className="delta-value">
-          Feature z-score: {formatSignedValue(signedZScore, 1)}
-        </span>
-        <span className="delta-text">{comparisonText}</span>
       </div>
     </div>
   );
@@ -456,7 +454,7 @@ function App() {
                   >
                     {formatSignedPercent(getDeltaWinRate(selectedFeature))}
                   </strong>{' '}
-                  win rate delta
+                  win rate when feature is active
                 </span>
                 <span>
                   <strong>{formatNumber(selectedFeature.fidelity_correlation, 2)}</strong> fidelity
