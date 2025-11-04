@@ -99,6 +99,10 @@
   font-weight: 600;
 }
 
+.feature-label {
+  font-weight: 400;
+}
+
 .table-caption {
   margin-bottom: 8px;
 }

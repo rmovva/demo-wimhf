@@ -422,7 +422,7 @@ function App() {
           <div className="examples-header">
             {selectedFeature ? (
               <h2>
-                <strong>Feature {selectedFeature.feature_idx}:</strong>{' '}
+                <span className="feature-label">Feature {selectedFeature.feature_idx}:</span>{' '}
                 <em>{selectedFeature.interpretation}</em>
               </h2>
             ) : (
