@@ -325,14 +325,6 @@
   padding-right: 4px;
 }
 
-.examples-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 8px;
-  font-size: 14px;
-  color: #4a4a4a;
-}
 
 .example-card {
   border: 1px solid #e1e4ed;

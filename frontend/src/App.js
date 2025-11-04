@@ -464,14 +464,6 @@ function App() {
             {selectedFeature && (
               <p className="examples-subhead">Example response pairs with large value of the feature</p>
             )}
-            <div className="examples-legend">
-              <span className="legend-item">
-                Positive z-score → chosen response (left) contains the feature more.
-              </span>
-              <span className="legend-item">
-                Negative z-score → rejected response (right) contains the feature more.
-              </span>
-            </div>
           </div>
           <div className="examples-list">
             {sortedExamples.length > 0 ? (
