@@ -429,9 +429,6 @@ function App() {
               <h2>Examples</h2>
             )}
             {selectedFeature && (
-              <p className="examples-subhead">Response pairs with large value of the feature</p>
-            )}
-            {selectedFeature && (
               <div className="feature-stats">
                 <span>
                   <strong
@@ -448,6 +445,9 @@ function App() {
                   <strong>{formatNumber(selectedFeature.fidelity_correlation, 2)}</strong> fidelity
                 </span>
               </div>
+            )}
+            {selectedFeature && (
+              <p className="examples-subhead">Response pairs with large value of the feature</p>
             )}
             <div className="examples-legend">
               <span className="legend-item">

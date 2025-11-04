@@ -99,6 +99,11 @@
   font-weight: 600;
 }
 
+.examples-header h2 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
 .feature-label {
   font-weight: 400;
 }
@@ -287,9 +292,10 @@
 }
 
 .examples-subhead {
-  margin: 0;
-  font-size: 15px;
-  color: #4b5563;
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .feature-stats {
