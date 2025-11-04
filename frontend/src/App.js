@@ -25,11 +25,17 @@ const DATASET_DISPLAY_NAMES = {
 };
 
 const COLUMN_DESCRIPTIONS = {
-  interpretation: 'Human-written summary of the sparse autoencoder feature.',
-  deltaWinRate: 'Percentage-point change in win rate when the feature activates.',
-  prevalence: 'Share of comparisons in this dataset where the feature fires.',
-  fidelity: 'Correlation between activation difference and the preference label.'
+  interpretation: 'LLM-generated description of response pairs that activate the SAE feature.',
+  deltaWinRate: 'Change in win rate when this feature is active.',
+  prevalence: 'Percent of response pairs containing the feature.',
+  fidelity: 'How well the feature description matches its activations.'
 };
+
+const PAPER_BULLETS = [
+  "We introduce What's In My Human Feedback? (WIMHF), a method to explain feedback data using sparse autoencoders.",
+  'WIMHF characterizes both (1) the preferences a dataset is capable of measuring and (2) the preferences that the annotators actually express.',
+  'Across 7 datasets, WIMHF identifies a small number of human-interpretable features that account for the majority of the preference prediction signal achieved by black-box models.'
+];
 
 const SORT_DIRECTIONS = {
   ASC: 'asc',
@@ -49,12 +55,13 @@ function getDeltaWinRate(feature) {
   return null;
 }
 
-function formatSignedPercent(value, fractionDigits = 1) {
+function formatSignedPercent(value) {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return '—';
   }
-  const sign = value > 0 ? '+' : '';
-  return `${sign}${value.toFixed(fractionDigits)}%`;
+  const rounded = Math.round(value);
+  const sign = rounded > 0 ? '+' : '';
+  return `${sign}${rounded}%`;
 }
 
 function formatSignedValue(value, fractionDigits = 1) {
@@ -65,11 +72,11 @@ function formatSignedValue(value, fractionDigits = 1) {
   return `${sign}${value.toFixed(fractionDigits)}`;
 }
 
-function formatPercent(value, fractionDigits = 1) {
+function formatPercent(value) {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return '—';
   }
-  return `${value.toFixed(fractionDigits)}%`;
+  return `${Math.round(value)}%`;
 }
 
 function formatNumber(value, fractionDigits = 3) {
@@ -270,6 +277,14 @@ function App() {
         </div>
       </header>
 
+      <section className="method-summary">
+        <ul>
+          {PAPER_BULLETS.map((point, index) => (
+            <li key={index}>{point}</li>
+          ))}
+        </ul>
+      </section>
+
       <section className="dataset-tabs">
         {datasets.map(dataset => (
           <button
@@ -341,7 +356,10 @@ function App() {
               <tbody>
                 {features.map(feature => {
                   const delta = getDeltaWinRate(feature);
-                  const pValue = feature.win_rate_p_value;
+                  const pValue =
+                    feature.logit_p_value !== undefined && feature.logit_p_value !== null
+                      ? feature.logit_p_value
+                      : feature.win_rate_p_value;
                   const isSignificant =
                     pValue !== null &&
                     pValue !== undefined &&
