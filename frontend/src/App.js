@@ -80,7 +80,19 @@ function formatNumber(value, fractionDigits = 3) {
   return value.toFixed(fractionDigits);
 }
 
-function ExampleCard({ example }) {
+function getExampleSignedZScore(example) {
+  if (!example) {
+    return null;
+  }
+  const winnerIsA = example.label === 1;
+  const rawZScore = example.activation_z_score;
+  if (rawZScore === null || rawZScore === undefined) {
+    return null;
+  }
+  return rawZScore * (winnerIsA ? 1 : -1);
+}
+
+function ExampleCard({ example, interpretation }) {
   if (!example) {
     return null;
   }
@@ -88,17 +100,28 @@ function ExampleCard({ example }) {
   const winnerIsA = example.label === 1;
   const chosenResponse = winnerIsA ? example.response_A : example.response_B;
   const rejectedResponse = winnerIsA ? example.response_B : example.response_A;
-  const rawZScore = example.activation_z_score;
-  const signedZScore =
-    rawZScore !== null && rawZScore !== undefined ? rawZScore * (winnerIsA ? 1 : -1) : null;
-  const comparisonText =
-    signedZScore === null
-      ? 'Feature difference unavailable.'
-      : signedZScore > 0
-        ? 'Chosen response contains the feature more.'
-        : signedZScore < 0
-          ? 'Rejected response contains the feature more.'
-          : 'Feature appears equally in both responses.';
+  const signedZScore = getExampleSignedZScore(example);
+  const dominantResponse =
+    signedZScore === null ? null : signedZScore > 0 ? 'chosen' : signedZScore < 0 ? 'rejected' : 'equal';
+  const featurePhrase = interpretation || 'this feature';
+  const comparisonText = (() => {
+    if (signedZScore === null) {
+      return 'Feature difference unavailable.';
+    }
+    if (dominantResponse === 'equal') {
+      return 'Feature appears equally in both responses.';
+    }
+    const leadingLabel = dominantResponse === 'chosen' ? 'Chosen response' : 'Rejected response';
+    const trailingLabel = dominantResponse === 'chosen' ? 'rejected response' : 'chosen response';
+    const leadingClass = dominantResponse === 'chosen' ? 'response-label positive' : 'response-label negative';
+    const trailingClass = dominantResponse === 'chosen' ? 'response-label negative' : 'response-label positive';
+    return (
+      <>
+        <span className={leadingClass}>{leadingLabel}</span> contains "{featurePhrase}" more than{' '}
+        <span className={trailingClass}>{trailingLabel}</span>.
+      </>
+    );
+  })();
 
   return (
     <div className="example-card">
@@ -128,14 +151,7 @@ function ExampleCard({ example }) {
           <div className="response-text">{rejectedResponse}</div>
         </div>
       </div>
-      <div
-        className={clsx(
-          'example-delta',
-          signedZScore > 0 && 'delta-positive',
-          signedZScore < 0 && 'delta-negative',
-          signedZScore === 0 && 'delta-neutral'
-        )}
-      >
+      <div className="example-delta">
         <span className="delta-value">
           Feature z-score: {formatSignedValue(signedZScore, 1)}
         </span>
@@ -215,6 +231,21 @@ function App() {
       features.find(feature => feature.feature_idx === selectedFeatureId) || features[0]
     );
   }, [features, selectedFeatureId]);
+
+  const sortedExamples = useMemo(() => {
+    if (!selectedFeature?.examples?.top_5_percent) {
+      return [];
+    }
+    const items = [...selectedFeature.examples.top_5_percent];
+    items.sort((a, b) => {
+      const aScore = getExampleSignedZScore(a);
+      const bScore = getExampleSignedZScore(b);
+      const aMetric = aScore === null ? -Infinity : Math.abs(aScore);
+      const bMetric = bScore === null ? -Infinity : Math.abs(bScore);
+      return bMetric - aMetric;
+    });
+    return items;
+  }, [selectedFeature]);
 
   const handleDatasetSelect = dataset => {
     if (dataset === selectedDataset) {
@@ -376,18 +407,27 @@ function App() {
           <div className="examples-header">
             {selectedFeature ? (
               <h2>
-                Feature {selectedFeature.feature_idx}: {selectedFeature.interpretation}
+                <strong>Feature {selectedFeature.feature_idx}:</strong>{' '}
+                <em>{selectedFeature.interpretation}</em>
               </h2>
             ) : (
               <h2>Examples</h2>
             )}
             {selectedFeature && (
+              <p className="examples-subhead">Response pairs with large value of the feature</p>
+            )}
+            {selectedFeature && (
               <div className="feature-stats">
                 <span>
-                  <strong>{formatSignedPercent(getDeltaWinRate(selectedFeature))}</strong> win rate delta
-                </span>
-                <span>
-                  <strong>{formatPercent(selectedFeature.prevalence_percentage)}</strong> prevalence
+                  <strong
+                    className={clsx(
+                      getDeltaWinRate(selectedFeature) > 0 && 'stat-positive',
+                      getDeltaWinRate(selectedFeature) < 0 && 'stat-negative'
+                    )}
+                  >
+                    {formatSignedPercent(getDeltaWinRate(selectedFeature))}
+                  </strong>{' '}
+                  win rate delta
                 </span>
                 <span>
                   <strong>{formatNumber(selectedFeature.fidelity_correlation, 2)}</strong> fidelity
@@ -404,9 +444,15 @@ function App() {
             </div>
           </div>
           <div className="examples-list">
-            {selectedFeature?.examples?.top_5_percent?.map((example, index) => (
-              <ExampleCard key={index} example={example} />
-            )) || (
+            {sortedExamples.length > 0 ? (
+              sortedExamples.map((example, index) => (
+                <ExampleCard
+                  key={index}
+                  example={example}
+                  interpretation={selectedFeature?.interpretation}
+                />
+              ))
+            ) : (
               <div className="placeholder">
                 Select a feature to see representative examples.
               </div>
