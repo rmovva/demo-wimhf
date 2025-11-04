@@ -39,6 +39,14 @@ const SORT_DIRECTIONS = {
 const SIGNIFICANCE_DENOMINATOR = 32;
 const SIGNIFICANCE_THRESHOLD = 0.05 / SIGNIFICANCE_DENOMINATOR;
 
+function isFeatureSignificant(feature) {
+  const pValue =
+    feature.logit_p_value !== undefined && feature.logit_p_value !== null
+      ? feature.logit_p_value
+      : feature.win_rate_p_value;
+  return pValue !== null && pValue !== undefined && pValue <= SIGNIFICANCE_THRESHOLD;
+}
+
 function getDeltaWinRate(feature) {
   if (feature.delta_win_rate_percentage !== undefined && feature.delta_win_rate_percentage !== null) {
     return feature.delta_win_rate_percentage;
@@ -200,13 +208,27 @@ function App() {
       return [];
     }
     const entries = Object.values(data[selectedDataset]);
-    const sorted = [...entries].sort((a, b) => {
+    const fidelityFiltered = entries.filter(feature => {
+      const fidelityP = feature.fidelity_p_value;
+      if (fidelityP === null || fidelityP === undefined) {
+        return true;
+      }
+      return fidelityP <= SIGNIFICANCE_THRESHOLD;
+    });
+
+    const compareByDelta = (a, b) => {
       const deltaA = getDeltaWinRate(a) ?? -Infinity;
       const deltaB = getDeltaWinRate(b) ?? -Infinity;
       const diff = deltaA - deltaB;
       return sortDirection === SORT_DIRECTIONS.DESC ? -diff : diff;
-    });
-    return sorted;
+    };
+
+    const significant = fidelityFiltered.filter(feature => isFeatureSignificant(feature)).sort(compareByDelta);
+    const notSignificant = fidelityFiltered
+      .filter(feature => !isFeatureSignificant(feature))
+      .sort(compareByDelta);
+
+    return [...significant, ...notSignificant];
   }, [data, selectedDataset, sortDirection]);
 
   useEffect(() => {
@@ -367,14 +389,7 @@ function App() {
               <tbody>
                 {features.map(feature => {
                   const delta = getDeltaWinRate(feature);
-                  const pValue =
-                    feature.logit_p_value !== undefined && feature.logit_p_value !== null
-                      ? feature.logit_p_value
-                      : feature.win_rate_p_value;
-                  const isSignificant =
-                    pValue !== null &&
-                    pValue !== undefined &&
-                    pValue <= SIGNIFICANCE_THRESHOLD;
+                  const isSignificant = isFeatureSignificant(feature);
                   return (
                     <tr
                       key={feature.feature_idx}
