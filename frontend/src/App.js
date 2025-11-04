@@ -31,12 +31,6 @@ const COLUMN_DESCRIPTIONS = {
   fidelity: 'How well the feature description matches its activations.'
 };
 
-const PAPER_BULLETS = [
-  "We introduce What's In My Human Feedback? (WIMHF), a method to explain feedback data using sparse autoencoders.",
-  'WIMHF characterizes both (1) the preferences a dataset is capable of measuring and (2) the preferences that the annotators actually express.',
-  'Across 7 datasets, WIMHF identifies a small number of human-interpretable features that account for the majority of the preference prediction signal achieved by black-box models.'
-];
-
 const SORT_DIRECTIONS = {
   ASC: 'asc',
   DESC: 'desc'
@@ -268,7 +262,7 @@ function App() {
         </div>
         <div className="header-title">
           <h1>What&apos;s In My Human Feedback?</h1>
-          <h3>Inspect feature-level patterns in human preference datasets.</h3>
+          <h3>Explain human feedback datasets using sparse autoencoder features.</h3>
         </div>
         <div className="header-block">
           <strong>Repo:</strong>
@@ -276,14 +270,6 @@ function App() {
           <a href="https://github.com/rmovva/wimhf">WIMHF on GitHub</a>
         </div>
       </header>
-
-      <section className="method-summary">
-        <ul>
-          {PAPER_BULLETS.map((point, index) => (
-            <li key={index}>{point}</li>
-          ))}
-        </ul>
-      </section>
 
       <section className="dataset-tabs">
         {datasets.map(dataset => (
@@ -304,8 +290,6 @@ function App() {
       <main className="main-content">
         <section className="feature-table-section">
           <div className="table-caption">
-            <h2>Model-Derived Features</h2>
-            <p>Click a row to see preference examples.</p>
             <div className="significance-legend">
               <span className="legend-item">
                 <span className="legend-swatch legend-positive" />
