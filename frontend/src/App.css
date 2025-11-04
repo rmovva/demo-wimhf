@@ -343,6 +343,13 @@
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
 }
 
+.example-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
 .example-delta {
   display: flex;
   flex-direction: column;

@@ -100,7 +100,7 @@ function getExampleSignedZScore(example) {
   return rawZScore * (winnerIsA ? 1 : -1);
 }
 
-function ExampleCard({ example, interpretation }) {
+function ExampleCard({ example, interpretation, exampleIndex }) {
   if (!example) {
     return null;
   }
@@ -133,6 +133,7 @@ function ExampleCard({ example, interpretation }) {
 
   return (
     <div className="example-card">
+      <div className="example-number">Example {exampleIndex + 1}</div>
       <div className="prompt-box">
         <strong>Prompt</strong>
         <div className="prompt-text">{example.prompt}</div>
@@ -447,7 +448,7 @@ function App() {
               </div>
             )}
             {selectedFeature && (
-              <p className="examples-subhead">Response pairs with large value of the feature</p>
+              <p className="examples-subhead">Example response pairs with large value of the feature</p>
             )}
             <div className="examples-legend">
               <span className="legend-item">
@@ -465,6 +466,7 @@ function App() {
                   key={index}
                   example={example}
                   interpretation={selectedFeature?.interpretation}
+                  exampleIndex={index}
                 />
               ))
             ) : (
