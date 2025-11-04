@@ -125,7 +125,7 @@ function ExampleCard({ example, interpretation }) {
     const trailingClass = dominantResponse === 'chosen' ? 'response-label negative' : 'response-label positive';
     return (
       <>
-        <span className={leadingClass}>{leadingLabel}</span> contains "{featurePhrase}" more than{' '}
+        <span className={leadingClass}>{leadingLabel}</span> "{featurePhrase}" more than{' '}
         <span className={trailingClass}>{trailingLabel}</span>.
       </>
     );
