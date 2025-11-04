@@ -62,7 +62,8 @@ function formatSignedPercent(value) {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return '—';
   }
-  const rounded = Math.round(value);
+  const scaled = Math.abs(value) <= 1 ? value * 100 : value;
+  const rounded = Math.round(scaled);
   const sign = rounded > 0 ? '+' : '';
   return `${sign}${rounded}%`;
 }
