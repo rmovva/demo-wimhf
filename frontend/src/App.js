@@ -24,6 +24,13 @@ const DATASET_DISPLAY_NAMES = {
   Tulu: 'Tulu 3'
 };
 
+const COLUMN_DESCRIPTIONS = {
+  interpretation: 'Human-written summary of the sparse autoencoder feature.',
+  deltaWinRate: 'Percentage-point change in win rate when the feature activates.',
+  prevalence: 'Share of comparisons in this dataset where the feature fires.',
+  fidelity: 'Correlation between activation difference and the preference label.'
+};
+
 const SORT_DIRECTIONS = {
   ASC: 'asc',
   DESC: 'desc'
@@ -303,12 +310,32 @@ function App() {
             <table className="feature-table">
               <thead>
                 <tr>
-                  <th className="feature-col">Feature Description</th>
-                  <th onClick={toggleSort} className="sortable-header">
-                    Δ Win Rate {sortDirection === SORT_DIRECTIONS.DESC ? '▲' : '▼'}
+                  <th className="feature-col">
+                    <div className="column-heading">
+                      <span>Feature Description</span>
+                      <span className="column-subtitle">{COLUMN_DESCRIPTIONS.interpretation}</span>
+                    </div>
                   </th>
-                  <th>Prevalence</th>
-                  <th>Fidelity</th>
+                  <th onClick={toggleSort} className="sortable-header">
+                    <div className="column-heading">
+                      <span>
+                        Δ Win Rate {sortDirection === SORT_DIRECTIONS.DESC ? '▲' : '▼'}
+                      </span>
+                      <span className="column-subtitle">{COLUMN_DESCRIPTIONS.deltaWinRate}</span>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="column-heading">
+                      <span>Prevalence</span>
+                      <span className="column-subtitle">{COLUMN_DESCRIPTIONS.prevalence}</span>
+                    </div>
+                  </th>
+                  <th>
+                    <div className="column-heading">
+                      <span>Fidelity</span>
+                      <span className="column-subtitle">{COLUMN_DESCRIPTIONS.fidelity}</span>
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody>
