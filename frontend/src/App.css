@@ -392,19 +392,10 @@
   border-radius: 10px;
   padding: 12px;
   margin-bottom: 10px;
-  border: 1px solid transparent;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
   flex: 1 1 280px;
   min-width: 0;
-}
-
-.response-positive {
-  background: #e7f6ed;
-  border-color: #9dd7b8;
-}
-
-.response-negative {
-  background: #fde9e9;
-  border-color: #f4b4b4;
 }
 
 .response-left strong,

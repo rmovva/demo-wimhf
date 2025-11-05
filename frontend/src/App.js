@@ -116,8 +116,6 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
   const leftResponseIsA = activationScore === null ? true : activationScore >= 0;
   const leftResponse = leftResponseIsA ? example.response_A : example.response_B;
   const rightResponse = leftResponseIsA ? example.response_B : example.response_A;
-  const leftResponseId = leftResponseIsA ? 'A' : 'B';
-  const rightResponseId = leftResponseIsA ? 'B' : 'A';
   const hasActivationData = activationScore !== null;
   const hasMeaningfulDifference = hasActivationData && activationScore !== 0;
   const activationLabel = hasActivationData ? Math.abs(activationScore).toFixed(1) : '—';
@@ -131,15 +129,15 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
     }
     return (
       <>
-        <span className="response-label positive">Response {leftResponseId}</span> shows "{featurePhrase}" more than{' '}
-        <span className="response-label negative">Response {rightResponseId}</span>.
+        <span className="response-label positive">Response A</span> shows "{featurePhrase}" more than{' '}
+        <span className="response-label negative">Response B</span>.
       </>
     );
   })();
-  const leftHeading = `Response ${leftResponseId}${
+  const leftHeading = `Response A${
     hasMeaningfulDifference ? ' (more of the feature)' : ''
   }`;
-  const rightHeading = `Response ${rightResponseId}${
+  const rightHeading = `Response B${
     hasMeaningfulDifference ? ' (less of the feature)' : ''
   }`;
   const preferredSideIsLeft = winnerIsA === leftResponseIsA;
@@ -158,8 +156,7 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
         <div
           className={clsx(
             'response-box',
-            'response-left',
-            hasMeaningfulDifference && 'response-positive'
+            'response-left'
           )}
         >
           <strong>{leftHeading}</strong>
@@ -168,8 +165,7 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
         <div
           className={clsx(
             'response-box',
-            'response-right',
-            hasMeaningfulDifference && 'response-negative'
+            'response-right'
           )}
         >
           <strong>{rightHeading}</strong>
