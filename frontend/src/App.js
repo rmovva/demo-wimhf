@@ -443,7 +443,7 @@ function App() {
             <a href="https://github.com/rmovva/wimhf">WIMHF on GitHub</a>
           </div>
           <div className="header-link-row dataset-link-row">
-            <span className="link-label">Datasets:</span>
+            <span className="link-label">Datasets:</span>{' '}
             <span className="dataset-links">
               {DATASET_LINKS.map(dataset => (
                 <a key={dataset.key} href={dataset.url}>
