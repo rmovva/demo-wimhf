@@ -140,12 +140,15 @@
   border-radius: 16px;
   overflow: hidden;
   background: white;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .feature-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  min-width: 720px;
 }
 
 .feature-table thead {
@@ -464,6 +467,14 @@
 
   .header-title h1 {
     font-size: 32px;
+  }
+
+  .column-heading {
+    gap: 2px;
+  }
+
+  .column-subtitle {
+    display: none;
   }
 
   .feature-table th,
