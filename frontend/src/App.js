@@ -429,13 +429,11 @@ function App() {
           </div>
           <div className="header-link-row dataset-link-row">
             <span className="link-label">Datasets:</span>{' '}
-            <span className="dataset-links">
-              {DATASET_LINKS.map(dataset => (
-                <a key={dataset.key} href={dataset.url}>
-                  [{dataset.label}]
-                </a>
-              ))}
-            </span>
+            {DATASET_LINKS.map(dataset => (
+              <a key={dataset.key} href={dataset.url} className="dataset-link">
+                [{dataset.label}]
+              </a>
+            ))}
           </div>
         </div>
       </header>
