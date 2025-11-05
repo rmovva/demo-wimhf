@@ -213,6 +213,10 @@ function App() {
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
+        const contentType = response.headers.get('content-type');
+        if (contentType && !contentType.toLowerCase().includes('application/json')) {
+          throw new Error('Feature data file is missing or invalid JSON.');
+        }
         const json = await response.json();
         validateLogitPValues(json);
         setData(json);

@@ -7,8 +7,6 @@
 # misc
 .DS_Store
 *.log
-public/feature_data_for_demo.json
-
 # testing
 /coverage
 
