@@ -154,9 +154,10 @@
 
 .feature-table th,
 .feature-table td {
-  padding: 14px 18px;
+  padding: 10px 12px;
   font-size: 15px;
   vertical-align: top;
+  line-height: 1.25;
 }
 
 .feature-table th {
