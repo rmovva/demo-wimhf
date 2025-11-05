@@ -89,20 +89,42 @@ function formatPromptText(text) {
   if (!text) {
     return text;
   }
-  const parts = String(text).split(/(Human:|Assistant:)/g);
-  return parts.map((part, index) => {
-    if (!part) {
-      return null;
-    }
-    if (part === 'Human:' || part === 'Assistant:') {
-      return (
-        <strong key={`prompt-token-${index}`}>{part}</strong>
-      );
-    }
-    return (
-      <React.Fragment key={`prompt-token-${index}`}>{part}</React.Fragment>
+  let remaining = String(text);
+  const elements = [];
+  const startMatch = remaining.match(/^\s*(\[[^\]]*trunc[^\]]*\])/i);
+  if (startMatch) {
+    elements.push(
+      <em key="prompt-trunc-start">{startMatch[1]}</em>,
+      <br key="prompt-trunc-break" />
     );
+    remaining = remaining.slice(startMatch[0].length);
+  }
+
+  let trailingTruncation = null;
+  const endMatch = remaining.match(/(\[[^\]]*trunc[^\]]*\])\s*$/i);
+  if (endMatch) {
+    trailingTruncation = endMatch[1];
+    remaining = remaining.slice(0, remaining.length - endMatch[0].length);
+  }
+
+  const tokens = String(remaining).split(/(Human:|Assistant:)/g);
+  tokens.forEach((token, index) => {
+    if (!token) {
+      return;
+    }
+    const key = `prompt-token-${index}`;
+    if (token === 'Human:' || token === 'Assistant:') {
+      elements.push(<strong key={key}>{token}</strong>);
+    } else {
+      elements.push(<React.Fragment key={key}>{token}</React.Fragment>);
+    }
   });
+
+  if (trailingTruncation) {
+    elements.push(<em key="prompt-trunc-end">{trailingTruncation}</em>);
+  }
+
+  return elements.length ? elements : text;
 }
 
 function getExampleActivationScore(example) {
