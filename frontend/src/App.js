@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import './App.css';
 
@@ -139,6 +139,14 @@ function getExampleActivationScore(example) {
 }
 
 function ExampleCard({ example, exampleIndex }) {
+  const promptRef = useRef(null);
+
+  useEffect(() => {
+    if (promptRef.current) {
+      promptRef.current.scrollTop = promptRef.current.scrollHeight;
+    }
+  }, [example?.prompt]);
+
   if (!example) {
     return null;
   }
@@ -176,13 +184,14 @@ function ExampleCard({ example, exampleIndex }) {
       {comparisonText && <div className="example-comparison">{comparisonText}</div>}
       <div className="prompt-box">
         <strong>Prompt</strong>
-        <div className="prompt-text">{formatPromptText(example.prompt)}</div>
+        <div className="prompt-text" ref={promptRef}>{formatPromptText(example.prompt)}</div>
       </div>
       <div className="responses-row">
         <div
           className={clsx(
             'response-box',
-            'response-left'
+            'response-left',
+            preferredSideIsLeft && 'preferred-response'
           )}
         >
           <strong>{leftHeading}</strong>
@@ -191,7 +200,8 @@ function ExampleCard({ example, exampleIndex }) {
         <div
           className={clsx(
             'response-box',
-            'response-right'
+            'response-right',
+            !preferredSideIsLeft && 'preferred-response'
           )}
         >
           <strong>{rightHeading}</strong>
@@ -199,7 +209,7 @@ function ExampleCard({ example, exampleIndex }) {
         </div>
       </div>
       <div className="preference-note">
-        <strong>{preferredSideIsLeft ? 'Response A (left)' : 'Response B (right)'}</strong> was preferred by the judge.
+        <strong>{preferredSideIsLeft ? 'Response A' : 'Response B'}</strong> was preferred.
       </div>
     </div>
   );

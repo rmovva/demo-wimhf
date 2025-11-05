@@ -378,6 +378,9 @@
   font-size: 14px;
   line-height: 1.55;
   white-space: pre-wrap;
+  max-height: calc(1.55em * 50);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .responses-row {
@@ -400,6 +403,11 @@
   background: #f0f2f7;
   flex: 1 1 320px;
   min-width: 0;
+}
+
+.preferred-response {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
 .response-left strong,
