@@ -429,7 +429,8 @@ function App() {
           <strong>Paper:</strong>{' '}
           <a href="https://arxiv.org/abs/2510.26202">
             What&apos;s in My Human Feedback?
-          </a>{' '}
+          </a>
+          <br />
           Rajiv Movva, Smitha Milli, Sewon Min, Emma Pierson.
         </div>
         <div className="header-title">
@@ -443,13 +444,13 @@ function App() {
           </div>
           <div className="header-link-row dataset-link-row">
             <span className="link-label">Datasets:</span>
-            <div className="dataset-links">
+            <span className="dataset-links">
               {DATASET_LINKS.map(dataset => (
                 <a key={dataset.key} href={dataset.url}>
                   [{dataset.label}]
                 </a>
               ))}
-            </div>
+            </span>
           </div>
         </div>
       </header>

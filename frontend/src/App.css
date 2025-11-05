@@ -42,7 +42,7 @@
 }
 
 .dataset-links {
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
@@ -50,7 +50,7 @@
 
 .dataset-links a {
   color: #1d4ed8;
-  font-weight: 500;
+  font-weight: 400;
   text-decoration: underline;
 }
 
