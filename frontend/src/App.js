@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import './App.css';
 
-const DATA_URL = `${process.env.PUBLIC_URL || ''}/wimhf_demo.json`;
+const DATA_URL = `${process.env.PUBLIC_URL || ''}/feature_data_for_demo.json`;
 
 const DATASET_ORDER = [
   'HH-RLHF',
@@ -38,14 +38,27 @@ const SORT_DIRECTIONS = {
 
 const SIGNIFICANCE_DENOMINATOR = 32;
 const SIGNIFICANCE_THRESHOLD = 0.05 / SIGNIFICANCE_DENOMINATOR;
+const MIN_FIDELITY = 0.3;
 const EXAMPLE_FIELDS = ['top_5_percent', 'top_2_percent', 'top_examples'];
 
+function validateLogitPValues(datasetMap) {
+  Object.entries(datasetMap || {}).forEach(([datasetName, features = {}]) => {
+    Object.values(features).forEach(feature => {
+      getLogitPValue(feature);
+    });
+  });
+}
+
+function getLogitPValue(feature) {
+  if (feature.logit_p_value === null || feature.logit_p_value === undefined) {
+    throw new Error(`Feature ${feature.feature_idx ?? ''} is missing logit_p_value`);
+  }
+  return feature.logit_p_value;
+}
+
 function isFeatureSignificant(feature) {
-  const pValue =
-    feature.logit_p_value !== undefined && feature.logit_p_value !== null
-      ? feature.logit_p_value
-      : feature.win_rate_p_value;
-  return pValue !== null && pValue !== undefined && pValue <= SIGNIFICANCE_THRESHOLD;
+  const pValue = getLogitPValue(feature);
+  return pValue <= SIGNIFICANCE_THRESHOLD;
 }
 
 function getDeltaWinRate(feature) {
@@ -68,14 +81,6 @@ function formatSignedPercent(value) {
   return `${sign}${rounded}%`;
 }
 
-function formatSignedValue(value, fractionDigits = 1) {
-  if (value === null || value === undefined || Number.isNaN(value)) {
-    return '—';
-  }
-  const sign = value > 0 ? '+' : '';
-  return `${sign}${value.toFixed(fractionDigits)}`;
-}
-
 function formatPercent(value) {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return '—';
@@ -90,16 +95,15 @@ function formatNumber(value, fractionDigits = 3) {
   return value.toFixed(fractionDigits);
 }
 
-function getExampleSignedZScore(example) {
+function getExampleActivationScore(example) {
   if (!example) {
     return null;
   }
-  const winnerIsA = example.label === 1;
-  const rawZScore = example.activation_z_score;
-  if (rawZScore === null || rawZScore === undefined) {
+  const score = example.activation_z_score;
+  if (score === null || score === undefined) {
     return null;
   }
-  return rawZScore * (winnerIsA ? 1 : -1);
+  return score;
 }
 
 function ExampleCard({ example, interpretation, exampleIndex }) {
@@ -108,36 +112,42 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
   }
 
   const winnerIsA = example.label === 1;
-  const chosenResponse = winnerIsA ? example.response_A : example.response_B;
-  const rejectedResponse = winnerIsA ? example.response_B : example.response_A;
-  const signedZScore = getExampleSignedZScore(example);
-  const dominantResponse =
-    signedZScore === null ? null : signedZScore > 0 ? 'chosen' : signedZScore < 0 ? 'rejected' : 'equal';
+  const activationScore = getExampleActivationScore(example);
+  const leftResponseIsA = activationScore === null ? true : activationScore >= 0;
+  const leftResponse = leftResponseIsA ? example.response_A : example.response_B;
+  const rightResponse = leftResponseIsA ? example.response_B : example.response_A;
+  const leftResponseId = leftResponseIsA ? 'A' : 'B';
+  const rightResponseId = leftResponseIsA ? 'B' : 'A';
+  const hasActivationData = activationScore !== null;
+  const hasMeaningfulDifference = hasActivationData && activationScore !== 0;
+  const activationLabel = hasActivationData ? Math.abs(activationScore).toFixed(1) : '—';
   const featurePhrase = interpretation || 'this feature';
   const comparisonText = (() => {
-    if (signedZScore === null) {
+    if (!hasActivationData) {
       return 'Feature difference unavailable.';
     }
-    if (dominantResponse === 'equal') {
+    if (!hasMeaningfulDifference) {
       return 'Feature appears equally in both responses.';
     }
-    const leadingLabel = dominantResponse === 'chosen' ? 'Chosen response' : 'Rejected response';
-    const trailingLabel = dominantResponse === 'chosen' ? 'rejected response' : 'chosen response';
-    const leadingClass = dominantResponse === 'chosen' ? 'response-label positive' : 'response-label negative';
-    const trailingClass = dominantResponse === 'chosen' ? 'response-label negative' : 'response-label positive';
     return (
       <>
-        <span className={leadingClass}>{leadingLabel}</span> "{featurePhrase}" more than{' '}
-        <span className={trailingClass}>{trailingLabel}</span>.
+        <span className="response-label positive">Response {leftResponseId}</span> shows "{featurePhrase}" more than{' '}
+        <span className="response-label negative">Response {rightResponseId}</span>.
       </>
     );
   })();
-  const zScoreLabel = formatSignedValue(signedZScore, 1);
+  const leftHeading = `Response ${leftResponseId}${
+    hasMeaningfulDifference ? ' (more of the feature)' : ''
+  }`;
+  const rightHeading = `Response ${rightResponseId}${
+    hasMeaningfulDifference ? ' (less of the feature)' : ''
+  }`;
+  const preferredSideIsLeft = winnerIsA === leftResponseIsA;
 
   return (
     <div className="example-card">
       <div className="example-number">
-        Example {exampleIndex + 1}: z-score {zScoreLabel}
+        Example {exampleIndex + 1}: activation {activationLabel}
       </div>
       <div className="example-comparison">{comparisonText}</div>
       <div className="prompt-box">
@@ -149,22 +159,25 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
           className={clsx(
             'response-box',
             'response-left',
-            'response-positive'
+            hasMeaningfulDifference && 'response-positive'
           )}
         >
-          <strong>Chosen response</strong>
-          <div className="response-text">{chosenResponse}</div>
+          <strong>{leftHeading}</strong>
+          <div className="response-text">{leftResponse}</div>
         </div>
         <div
           className={clsx(
             'response-box',
             'response-right',
-            'response-negative'
+            hasMeaningfulDifference && 'response-negative'
           )}
         >
-          <strong>Rejected response</strong>
-          <div className="response-text">{rejectedResponse}</div>
+          <strong>{rightHeading}</strong>
+          <div className="response-text">{rightResponse}</div>
         </div>
+      </div>
+      <div className="preference-note">
+        The response on the <em>{preferredSideIsLeft ? 'left' : 'right'}</em> was preferred by the judge.
       </div>
     </div>
   );
@@ -201,6 +214,7 @@ function App() {
           throw new Error(`HTTP ${response.status}`);
         }
         const json = await response.json();
+        validateLogitPValues(json);
         setData(json);
         const datasetNames = DATASET_ORDER.filter(name => Object.prototype.hasOwnProperty.call(json, name));
         setDatasets(datasetNames);
@@ -208,7 +222,8 @@ function App() {
           setSelectedDataset(datasetNames[0]);
         }
       } catch (err) {
-        setError('Unable to load WIMHF demo data. Please ensure wimhf_demo.json is available.');
+        console.error(err);
+        setError(err?.message || 'Unable to load feature data. Please ensure feature_data_for_demo.json is available.');
       } finally {
         setIsLoading(false);
       }
@@ -223,11 +238,8 @@ function App() {
     }
     const entries = Object.values(data[selectedDataset]);
     const fidelityFiltered = entries.filter(feature => {
-      const fidelityP = feature.fidelity_p_value;
-      if (fidelityP === null || fidelityP === undefined) {
-        return true;
-      }
-      return fidelityP <= SIGNIFICANCE_THRESHOLD;
+      const fidelityScore = feature.fidelity_correlation;
+      return fidelityScore !== null && fidelityScore !== undefined && fidelityScore >= MIN_FIDELITY;
     });
 
     const compareByDelta = (a, b) => {
@@ -275,8 +287,8 @@ function App() {
     }
     const items = [...exampleList];
     items.sort((a, b) => {
-      const aScore = getExampleSignedZScore(a);
-      const bScore = getExampleSignedZScore(b);
+      const aScore = getExampleActivationScore(a);
+      const bScore = getExampleActivationScore(b);
       const aMetric = aScore === null ? -Infinity : Math.abs(aScore);
       const bMetric = bScore === null ? -Infinity : Math.abs(bScore);
       return bMetric - aMetric;

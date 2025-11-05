@@ -382,6 +382,12 @@
   flex-wrap: wrap;
 }
 
+.preference-note {
+  font-size: 13px;
+  color: #4b5563;
+  margin-top: 4px;
+}
+
 .response-box {
   border-radius: 10px;
   padding: 12px;

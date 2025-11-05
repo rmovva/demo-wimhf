@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const SOURCE_DATA_PATH = '/Users/rajivmovva/data/wimhf_demo.json';
-const TARGET_DATA_PATH = path.join(__dirname, '..', 'public', 'wimhf_demo.json');
+const SOURCE_DATA_PATH = '/Users/rajivmovva/Documents/data/feature_data_for_demo.json';
+const TARGET_DATA_PATH = path.join(__dirname, '..', 'public', 'feature_data_for_demo.json');
 
 function copyData() {
   try {
