@@ -14,6 +14,44 @@ const DATASET_DISPLAY_NAMES = {
   Tulu: 'Tulu 3'
 };
 
+const DATASET_LINKS = [
+  {
+    key: 'HH-RLHF',
+    label: DATASET_DISPLAY_NAMES['HH-RLHF'],
+    url: 'https://huggingface.co/datasets/Anthropic/hh-rlhf'
+  },
+  {
+    key: 'Reddit',
+    label: DATASET_DISPLAY_NAMES.Reddit,
+    url: 'https://huggingface.co/datasets/stanfordnlp/SHP-2'
+  },
+  {
+    key: 'PRISM',
+    label: DATASET_DISPLAY_NAMES.PRISM,
+    url: 'https://huggingface.co/datasets/HannahRoseKirk/prism-alignment'
+  },
+  {
+    key: 'CommunityAlign',
+    label: DATASET_DISPLAY_NAMES.CommunityAlign,
+    url: 'https://huggingface.co/datasets/facebook/community-alignment-dataset'
+  },
+  {
+    key: 'ChatbotArena',
+    label: DATASET_DISPLAY_NAMES.ChatbotArena,
+    url: 'https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k'
+  },
+  {
+    key: 'PKU',
+    label: DATASET_DISPLAY_NAMES.PKU,
+    url: 'https://huggingface.co/datasets/PKU-Alignment/PKU-SafeRLHF'
+  },
+  {
+    key: 'Tulu',
+    label: DATASET_DISPLAY_NAMES.Tulu,
+    url: 'https://huggingface.co/datasets/allenai/llama-3.1-tulu-3-8b-preference-mixture'
+  }
+];
+
 const COLUMN_DESCRIPTIONS = {
   interpretation: 'LLM-generated description of response pairs that activate the SAE feature.',
   deltaWinRate: 'Change in win rate when this feature is active.',
@@ -399,9 +437,20 @@ function App() {
           <h3>Explain the encoded preferences in feedback data using interpretable sparse autoencoder features.</h3>
         </div>
         <div className="header-block">
-          <strong>Repo:</strong>
-          <br />
-          <a href="https://github.com/rmovva/wimhf">WIMHF on GitHub</a>
+          <div className="header-link-row">
+            <span className="link-label">Code:</span>
+            <a href="https://github.com/rmovva/wimhf">WIMHF on GitHub</a>
+          </div>
+          <div className="header-link-row dataset-link-row">
+            <span className="link-label">Datasets:</span>
+            <div className="dataset-links">
+              {DATASET_LINKS.map(dataset => (
+                <a key={dataset.key} href={dataset.url}>
+                  {dataset.label}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
