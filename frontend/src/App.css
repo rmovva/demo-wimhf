@@ -1,21 +1,21 @@
 .page-shell {
-  width: min(1600px, 94vw);
+  width: min(1600px, 92vw);
   margin: 0 auto;
-  padding: 32px clamp(16px, 4vw, 48px) 56px;
+  padding: 48px clamp(24px, 5vw, 72px) 72px;
 }
 
 .top-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 28px;
+  margin-bottom: 48px;
 }
 
 .header-block {
-  max-width: 280px;
-  font-size: 15px;
-  line-height: 1.4;
+  max-width: 320px;
+  font-size: 16px;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -26,32 +26,32 @@
 
 .header-title h1 {
   margin: 0;
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .header-title h3 {
-  margin: 8px 0 0;
+  margin: 12px 0 0;
   font-weight: 400;
   color: #4c4c4c;
 }
 
 .dataset-tabs {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 36px;
 }
 
 .tab-button {
   border: 1px solid #d0d7e2;
   border-radius: 999px;
-  padding: 10px 22px;
+  padding: 12px 28px;
   background: #f5f7fb;
   color: #0f172a;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
@@ -72,7 +72,7 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 36px;
 }
 
 .feature-table-section,
@@ -109,14 +109,14 @@
 }
 
 .table-caption {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .significance-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 18px;
-  margin-top: 10px;
+  gap: 16px 24px;
+  margin-top: 12px;
   font-size: 16px;
   color: #1f2937;
 }
@@ -135,9 +135,9 @@
 }
 
 .table-wrapper {
-  margin-top: 12px;
+  margin-top: 16px;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   background: white;
 }
@@ -154,7 +154,7 @@
 
 .feature-table th,
 .feature-table td {
-  padding: 10px 14px;
+  padding: 14px 18px;
   font-size: 15px;
   vertical-align: top;
 }
@@ -171,7 +171,7 @@
 .column-heading {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .column-subtitle {
@@ -288,7 +288,7 @@
 .examples-header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .examples-subhead {
@@ -320,19 +320,19 @@
 }
 
 .examples-list {
-  margin-top: 12px;
+  margin-top: 16px;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 6px;
 }
 
 
 .example-card {
   border: 1px solid #e1e4ed;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
   background: #fbfcff;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
 }
 
 .example-number {
@@ -363,9 +363,9 @@
 
 .prompt-box {
   background: #f0f2f7;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .prompt-text,
@@ -378,7 +378,7 @@
 
 .responses-row {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -389,12 +389,12 @@
 }
 
 .response-box {
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
   border: 1px solid #e1e4ed;
   background: #f0f2f7;
-  flex: 1 1 280px;
+  flex: 1 1 320px;
   min-width: 0;
 }
 
