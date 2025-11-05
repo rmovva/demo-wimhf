@@ -4,22 +4,12 @@ import './App.css';
 
 const DATA_URL = `${process.env.PUBLIC_URL || ''}/feature_data_for_demo.json`;
 
-const DATASET_ORDER = [
-  'HH-RLHF',
-  'Reddit',
-  'PRISM',
-  'CommunityAlign',
-  'ChatbotArena',
-  'PKU',
-  'Tulu'
-];
-
 const DATASET_DISPLAY_NAMES = {
   'HH-RLHF': 'HH-RLHF',
   Reddit: 'Reddit',
   PRISM: 'PRISM',
   CommunityAlign: 'Community Alignment',
-  ChatbotArena: 'Chatbot Arena',
+  ChatbotArena: 'LMArena',
   PKU: 'PKU-SafeRLHF',
   Tulu: 'Tulu 3'
 };
@@ -209,7 +199,13 @@ function App() {
         const json = await response.json();
         validateLogitPValues(json);
         setData(json);
-        const datasetNames = DATASET_ORDER.filter(name => Object.prototype.hasOwnProperty.call(json, name));
+        const datasetNames = Object.keys(json)
+          .filter(name => Object.prototype.hasOwnProperty.call(json, name))
+          .sort((a, b) => {
+            const nameA = (DATASET_DISPLAY_NAMES[a] || a).toLowerCase();
+            const nameB = (DATASET_DISPLAY_NAMES[b] || b).toLowerCase();
+            return nameA.localeCompare(nameB);
+          });
         setDatasets(datasetNames);
         if (datasetNames.length > 0) {
           setSelectedDataset(datasetNames[0]);
@@ -362,11 +358,11 @@ function App() {
             <div className="significance-legend">
               <span className="legend-item">
                 <span className="legend-swatch legend-positive" />
-                increases win rate (significant)
+                increases win rate (statistically significant)
               </span>
               <span className="legend-item">
                 <span className="legend-swatch legend-negative" />
-                decreases win rate (significant)
+                decreases win rate (statistically significant)
               </span>
               <span className="legend-item">
                 <span className="legend-swatch legend-neutral" />
