@@ -85,6 +85,26 @@ function formatNumber(value, fractionDigits = 3) {
   return value.toFixed(fractionDigits);
 }
 
+function formatPromptText(text) {
+  if (!text) {
+    return text;
+  }
+  const parts = String(text).split(/(Human:|Assistant:)/g);
+  return parts.map((part, index) => {
+    if (!part) {
+      return null;
+    }
+    if (part === 'Human:' || part === 'Assistant:') {
+      return (
+        <strong key={`prompt-token-${index}`}>{part}</strong>
+      );
+    }
+    return (
+      <React.Fragment key={`prompt-token-${index}`}>{part}</React.Fragment>
+    );
+  });
+}
+
 function getExampleActivationScore(example) {
   if (!example) {
     return null;
@@ -133,7 +153,7 @@ function ExampleCard({ example, exampleIndex }) {
       {comparisonText && <div className="example-comparison">{comparisonText}</div>}
       <div className="prompt-box">
         <strong>Prompt</strong>
-        <div className="prompt-text">{example.prompt}</div>
+        <div className="prompt-text">{formatPromptText(example.prompt)}</div>
       </div>
       <div className="responses-row">
         <div
