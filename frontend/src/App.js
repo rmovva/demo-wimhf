@@ -14,43 +14,28 @@ const DATASET_DISPLAY_NAMES = {
   Tulu: 'Tulu 3'
 };
 
-const DATASET_LINKS = [
-  {
-    key: 'HH-RLHF',
-    label: DATASET_DISPLAY_NAMES['HH-RLHF'],
-    url: 'https://huggingface.co/datasets/Anthropic/hh-rlhf'
-  },
-  {
-    key: 'Reddit',
-    label: DATASET_DISPLAY_NAMES.Reddit,
-    url: 'https://huggingface.co/datasets/stanfordnlp/SHP-2'
-  },
-  {
-    key: 'PRISM',
-    label: DATASET_DISPLAY_NAMES.PRISM,
-    url: 'https://huggingface.co/datasets/HannahRoseKirk/prism-alignment'
-  },
-  {
-    key: 'CommunityAlign',
-    label: DATASET_DISPLAY_NAMES.CommunityAlign,
-    url: 'https://huggingface.co/datasets/facebook/community-alignment-dataset'
-  },
-  {
-    key: 'ChatbotArena',
-    label: DATASET_DISPLAY_NAMES.ChatbotArena,
-    url: 'https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k'
-  },
-  {
-    key: 'PKU',
-    label: DATASET_DISPLAY_NAMES.PKU,
-    url: 'https://huggingface.co/datasets/PKU-Alignment/PKU-SafeRLHF'
-  },
-  {
-    key: 'Tulu',
-    label: DATASET_DISPLAY_NAMES.Tulu,
-    url: 'https://huggingface.co/datasets/allenai/llama-3.1-tulu-3-8b-preference-mixture'
-  }
-];
+const DATASET_URLS = {
+  'HH-RLHF': 'https://huggingface.co/datasets/Anthropic/hh-rlhf',
+  Reddit: 'https://huggingface.co/datasets/stanfordnlp/SHP-2',
+  PRISM: 'https://huggingface.co/datasets/HannahRoseKirk/prism-alignment',
+  CommunityAlign: 'https://huggingface.co/datasets/facebook/community-alignment-dataset',
+  ChatbotArena: 'https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k',
+  PKU: 'https://huggingface.co/datasets/PKU-Alignment/PKU-SafeRLHF',
+  Tulu: 'https://huggingface.co/datasets/allenai/llama-3.1-tulu-3-8b-preference-mixture'
+};
+
+const DATASET_LINKS = Object.keys(DATASET_DISPLAY_NAMES)
+  .sort((a, b) => {
+    const nameA = (DATASET_DISPLAY_NAMES[a] || a).toLowerCase();
+    const nameB = (DATASET_DISPLAY_NAMES[b] || b).toLowerCase();
+    return nameA.localeCompare(nameB);
+  })
+  .map(key => ({
+    key,
+    label: DATASET_DISPLAY_NAMES[key] || key,
+    url: DATASET_URLS[key]
+  }))
+  .filter(link => Boolean(link.url));
 
 const COLUMN_DESCRIPTIONS = {
   interpretation: 'LLM-generated description of response pairs that activate the SAE feature.',
