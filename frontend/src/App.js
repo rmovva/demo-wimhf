@@ -156,7 +156,7 @@ function ExampleCard({ example, exampleIndex }) {
         </div>
       </div>
       <div className="preference-note">
-        The response on the <em>{preferredSideIsLeft ? 'left' : 'right'}</em> was preferred by the judge.
+        <strong>{preferredSideIsLeft ? 'Response A (left)' : 'Response B (right)'}</strong> was preferred by the judge.
       </div>
     </div>
   );
