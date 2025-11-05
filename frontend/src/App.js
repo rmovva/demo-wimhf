@@ -274,10 +274,26 @@ function App() {
     });
 
     const compareByDelta = (a, b) => {
-      const deltaA = getDeltaWinRate(a) ?? -Infinity;
-      const deltaB = getDeltaWinRate(b) ?? -Infinity;
-      const diff = deltaA - deltaB;
-      return sortDirection === SORT_DIRECTIONS.DESC ? -diff : diff;
+      const deltaA = getDeltaWinRate(a);
+      const deltaB = getDeltaWinRate(b);
+
+      if (deltaA === null && deltaB === null) {
+        return 0;
+      }
+      if (deltaA === null) {
+        return 1;
+      }
+      if (deltaB === null) {
+        return -1;
+      }
+
+      const metricA = Math.abs(deltaA);
+      const metricB = Math.abs(deltaB);
+
+      if (sortDirection === SORT_DIRECTIONS.DESC) {
+        return metricB - metricA;
+      }
+      return metricA - metricB;
     };
 
     const significant = fidelityFiltered.filter(feature => isFeatureSignificant(feature)).sort(compareByDelta);
