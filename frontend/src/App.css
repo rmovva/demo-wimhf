@@ -1,5 +1,5 @@
 .page-shell {
-  width: min(1600px, 92vw);
+  width: min(1400px, 90vw);
   margin: 0 auto;
   padding: 48px clamp(24px, 5vw, 72px) 72px;
 }
@@ -135,11 +135,12 @@
 }
 
 .table-wrapper {
-  margin-top: 16px;
+  margin: 16px auto 0;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   overflow: hidden;
   background: white;
+  width: min(1120px, 100%);
 }
 
 .feature-table {
@@ -154,9 +155,10 @@
 
 .feature-table th,
 .feature-table td {
-  padding: 14px 18px;
+  padding: 10px 14px;
   font-size: 15px;
   vertical-align: top;
+  line-height: 1.35;
 }
 
 .feature-table th {
@@ -171,7 +173,7 @@
 .column-heading {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .column-subtitle {
@@ -182,16 +184,16 @@
 }
 
 .feature-col {
-  width: 55%;
+  width: 45%;
 }
 
 .feature-table td:first-child {
-  width: 55%;
+  width: 45%;
 }
 
 .feature-table td:not(:first-child),
 .feature-table th:not(:first-child) {
-  width: 15%;
+  width: 18%;
 }
 
 .feature-table tbody {
@@ -220,7 +222,7 @@
 
 .feature-interpretation {
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.3;
   color: #1f1f1f;
 }
 
@@ -342,6 +344,10 @@
   margin-bottom: 4px;
 }
 
+.example-separator {
+  width: 100%;
+  height: 12px;
+}
 .example-comparison {
   font-size: 14px;
   color: #111827;

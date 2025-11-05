@@ -172,6 +172,7 @@ function ExampleCard({ example, exampleIndex }) {
       <div className="example-number">
         Example {exampleIndex + 1}
       </div>
+      <div className="example-separator" />
       {comparisonText && <div className="example-comparison">{comparisonText}</div>}
       <div className="prompt-box">
         <strong>Prompt</strong>
@@ -519,9 +520,6 @@ function App() {
                   <strong>{formatNumber(selectedFeature.fidelity_correlation, 2)}</strong> fidelity
                 </span>
               </div>
-            )}
-            {selectedFeature && (
-              <p className="examples-subhead">Example response pairs with large value of the feature</p>
             )}
           </div>
           <div className="examples-list">
