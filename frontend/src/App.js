@@ -106,7 +106,7 @@ function getExampleActivationScore(example) {
   return score;
 }
 
-function ExampleCard({ example, interpretation, exampleIndex }) {
+function ExampleCard({ example, exampleIndex }) {
   if (!example) {
     return null;
   }
@@ -118,8 +118,6 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
   const rightResponse = leftResponseIsA ? example.response_B : example.response_A;
   const hasActivationData = activationScore !== null;
   const hasMeaningfulDifference = hasActivationData && activationScore !== 0;
-  const activationLabel = hasActivationData ? Math.abs(activationScore).toFixed(1) : '—';
-  const featurePhrase = interpretation || 'this feature';
   const comparisonText = (() => {
     if (!hasActivationData) {
       return 'Feature difference unavailable.';
@@ -127,12 +125,7 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
     if (!hasMeaningfulDifference) {
       return 'Feature appears equally in both responses.';
     }
-    return (
-      <>
-        <span className="response-label positive">Response A</span> shows "{featurePhrase}" more than{' '}
-        <span className="response-label negative">Response B</span>.
-      </>
-    );
+    return null;
   })();
   const leftHeading = `Response A${
     hasMeaningfulDifference ? ' (more of the feature)' : ''
@@ -145,9 +138,9 @@ function ExampleCard({ example, interpretation, exampleIndex }) {
   return (
     <div className="example-card">
       <div className="example-number">
-        Example {exampleIndex + 1}: activation {activationLabel}
+        Example {exampleIndex + 1}
       </div>
-      <div className="example-comparison">{comparisonText}</div>
+      {comparisonText && <div className="example-comparison">{comparisonText}</div>}
       <div className="prompt-box">
         <strong>Prompt</strong>
         <div className="prompt-text">{example.prompt}</div>
@@ -483,7 +476,6 @@ function App() {
                 <ExampleCard
                   key={index}
                   example={example}
-                  interpretation={selectedFeature?.interpretation}
                   exampleIndex={index}
                 />
               ))
