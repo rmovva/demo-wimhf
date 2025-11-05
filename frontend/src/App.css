@@ -12,6 +12,11 @@
   margin-bottom: 48px;
 }
 
+.top-header a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
 .header-block {
   max-width: 320px;
   font-size: 16px;
@@ -51,9 +56,7 @@
 .dataset-link {
   display: inline-block;
   margin-left: 6px;
-  color: #0f172a;
   font-weight: 400;
-  text-decoration: underline;
 }
 
 .dataset-link:first-of-type {
