@@ -461,15 +461,6 @@
     font-size: 15px;
   }
 
-  .feature-col,
-  .feature-table td:first-child {
-    width: 100%;
-  }
-
-  .feature-table td:not(:first-child),
-  .feature-table th:not(:first-child) {
-    width: auto;
-  }
 }
 
 @media (max-width: 600px) {
